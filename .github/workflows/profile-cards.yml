@@ -1,0 +1,74 @@
+# Builds the GitHub stats cards shown in README.md and commits them to profile/.
+# The cards are generated here instead of being linked from the shared
+# github-readme-stats server, which is often rate-limited or paused.
+name: Update profile cards
+
+on:
+  schedule:
+    - cron: "37 4 * * *" # daily
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/profile-cards.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-cards-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cards:
+    runs-on: ubuntu-latest
+    env:
+      STATS: username=${{ github.repository_owner }}&show_icons=true&include_all_commits=true&card_width=495&border_radius=6
+      LANGS: username=${{ github.repository_owner }}&layout=compact&langs_count=8&card_width=495&border_radius=6
+      DARK: bg_color=0d1117&border_color=30363d&title_color=a78bfa&icon_color=22d3ee&text_color=c9d1d9&ring_color=a78bfa
+      LIGHT: bg_color=ffffff&border_color=d0d7de&title_color=7c3aed&icon_color=0891b2&text_color=1f2328&ring_color=7c3aed
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Stats card (dark)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: ${{ env.STATS }}&${{ env.DARK }}
+          path: profile/stats-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Stats card (light)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: ${{ env.STATS }}&${{ env.LIGHT }}
+          path: profile/stats-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Top languages card (dark)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: ${{ env.LANGS }}&${{ env.DARK }}
+          path: profile/top-langs-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Top languages card (light)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: ${{ env.LANGS }}&${{ env.LIGHT }}
+          path: profile/top-langs-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit updated cards
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add profile/
+          if git diff --cached --quiet; then
+            echo "Cards are unchanged."
+          else
+            git commit -m "Update profile cards"
+            git push
+          fi

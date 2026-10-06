@@ -1,27 +1,97 @@
-#Hey there! 👋 I'm Jivansh
-<br>I'm a student developer at Chitkara University 🎓, passionate about coding and creating <br>impactful solutions! I love learning new things and building exciting projects 🚀.<br><br>💻 Technologies I work with:<br>      🐍 Python: Automation, scripting, and machine learning.<br>      ⚡ JavaScript: Web development with frameworks like React.<br>      🖥️ C++: System programming and competitive coding.<br><br>🔭 Current Focus:<br>     ⚙️ Building projects in Python, JavaScript, and C++.<br>     🌐 Exploring web development and open-source contributions.<br>     🤖 Learning about machine learning and new technologies.<br><br>🤝 Let's Collaborate:<br>     💡 Got a cool project idea in mind? Let's brainstorm!<br>     🤝 Open to collaborating on open-source projects and real-world challenges.<br>     🧠 Always ready to dive into something new and learn together.<br><br>✨ Fun fact:<br>      I’m always up for a tech challenge and learning something exciting! 💡
+<p align="center">
+  <img src="assets/banner.svg" width="100%" alt="Hi, I'm Jivansh: a student developer at Chitkara University" />
+</p>
 
+<p align="center">
+  <a href="https://www.linkedin.com/in/jivansh-midha-62463926b"><img src="https://img.shields.io/badge/-Connect_on_LinkedIn-0A66C2?style=for-the-badge&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNNCAxaDE2YTMgMyAwIDAgMSAzIDN2MTZhMyAzIDAgMCAxLTMgM0g0YTMgMyAwIDAgMS0zLTNWNGEzIDMgMCAwIDEgMy0zWk01LjMgOS40aDMuMXY5LjlINS4zWk02Ljg1IDQuNmExLjggMS44IDAgMSAxIDAgMy42IDEuOCAxLjggMCAwIDEgMC0zLjZaTTEwLjMgOS40aDN2MS40Yy40NS0uODUgMS41NS0xLjcgMy4xNS0xLjcgMy4yIDAgMy43NSAyLjEgMy43NSA0Ljh2NS40aC0zLjF2LTQuOGMwLTEuMTUtLjA1LTIuNi0xLjYtMi42LTEuNiAwLTEuODUgMS4yNS0xLjg1IDIuNXY0LjloLTMuM1oiLz48L3N2Zz4%3D" alt="Connect on LinkedIn" /></a>
+  <a href="https://github.com/JivanshM?tab=followers"><img src="https://img.shields.io/github/followers/JivanshM?label=Followers&style=for-the-badge&logo=github&logoColor=white&labelColor=24292f&color=7c3aed" alt="GitHub followers" /></a>
+</p>
 
-## 🌐 Socials:
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://linkedin.com/in/https://www.linkedin.com/in/jivansh-midha-62463926b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app) 
+## 👋 About me
 
-# 💻 Tech Stack:
-![C](https://img.shields.io/badge/c-%2300599C.svg?style=for-the-badge&logo=c&logoColor=white) ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white) ![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=for-the-badge&logo=powershell&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white) ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white) ![DigitalOcean](https://img.shields.io/badge/DigitalOcean-%230167ff.svg?style=for-the-badge&logo=digitalOcean&logoColor=white) ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase) ![GithubPages](https://img.shields.io/badge/github%20pages-121013?style=for-the-badge&logo=github&logoColor=white) ![Google Cloud](https://img.shields.io/badge/GoogleCloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white) ![Linode](https://img.shields.io/badge/linode-00A95C?style=for-the-badge&logo=linode&logoColor=white) ![Netlify](https://img.shields.io/badge/netlify-%23000000.svg?style=for-the-badge&logo=netlify&logoColor=#00C7B7) ![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white) ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white) ![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white) ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white) ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![WordPress](https://img.shields.io/badge/WordPress-%23117AC9.svg?style=for-the-badge&logo=WordPress&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Firebase](https://img.shields.io/badge/firebase-a08021?style=for-the-badge&logo=firebase&logoColor=ffcd34) ![Adobe](https://img.shields.io/badge/adobe-%23FF0000.svg?style=for-the-badge&logo=adobe&logoColor=white) ![Canva](https://img.shields.io/badge/Canva-%2300C4CC.svg?style=for-the-badge&logo=Canva&logoColor=white) ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white) ![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white) ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Arduino](https://img.shields.io/badge/-Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white) ![Cisco](https://img.shields.io/badge/cisco-%23049fd9.svg?style=for-the-badge&logo=cisco&logoColor=black) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Raspberry Pi](https://img.shields.io/badge/-RaspberryPi-C51A4A?style=for-the-badge&logo=Raspberry-Pi)
-# 📊 GitHub Stats:
-![](https://github-readme-stats.vercel.app/api?username=JivanshM&theme=dark&hide_border=false&include_all_commits=true&count_private=false)<br/>
-![](https://github-readme-streak-stats.herokuapp.com/?user=JivanshM&theme=dark&hide_border=false)<br/>
-![](https://github-readme-stats.vercel.app/api/top-langs/?username=JivanshM&theme=dark&hide_border=false&include_all_commits=true&count_private=false&layout=compact)
+I'm a student developer at **Chitkara University** 🎓 who loves turning ideas into impactful projects 🚀. I'm always learning something new, and I'm always up for a tech challenge.
 
-## 🏆 GitHub Trophies
-![](https://github-profile-trophy.vercel.app/?username=JivanshM&theme=radical&no-frame=false&no-bg=false&margin-w=4)
+**💻 What I work with**
 
-### ✍️ Random Dev Quote
-![](https://quotes-github-readme.vercel.app/api?type=horizontal&theme=tokyonight)
+- 🐍 **Python**: automation, scripting and machine learning
+- ⚡ **JavaScript**: web development with React
+- 🖥️ **C++**: systems programming and competitive coding
 
-### 🔝 Top Contributed Repo
-![](https://github-contributor-stats.vercel.app/api?username=JivanshM&limit=5&theme=dark&combine_all_yearly_contributions=true)
+**🔭 What I'm focused on**
 
----
-[![](https://visitcount.itsvg.in/api?id=JivanshM&icon=5&color=1)](https://visitcount.itsvg.in)
+- ⚙️ Building projects in Python, JavaScript and C++
+- 🌐 Exploring web development and open-source contributions
+- 🤖 Learning machine learning and new technologies
 
-<!-- Proudly created with GPRM ( https://gprm.itsvg.in ) -->
+🤝 **Let's collaborate!** Got a cool project idea? I'd love to brainstorm, and I'm open to working on open-source projects and real-world challenges.
+
+## 🛠️ Tech stack
+
+<p align="center">
+  <sub><b>LANGUAGES</b></sub><br />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=py,js,ts,cpp,c,php,html,css,powershell&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://skillicons.dev/icons?i=py,js,ts,cpp,c,php,html,css,powershell&theme=light" />
+    <img src="https://skillicons.dev/icons?i=py,js,ts,cpp,c,php,html,css,powershell&theme=light" alt="Python, JavaScript, TypeScript, C++, C, PHP, HTML, CSS, PowerShell" />
+  </picture>
+</p>
+
+<p align="center">
+  <sub><b>FRAMEWORKS &amp; LIBRARIES</b></sub><br />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=react,django,flask,tailwind,bootstrap,tensorflow,wordpress&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://skillicons.dev/icons?i=react,django,flask,tailwind,bootstrap,tensorflow,wordpress&theme=light" />
+    <img src="https://skillicons.dev/icons?i=react,django,flask,tailwind,bootstrap,tensorflow,wordpress&theme=light" alt="React, Django, Flask, Tailwind CSS, Bootstrap, TensorFlow, WordPress" />
+  </picture><br />
+  <sub>+ React Native · pandas · NumPy</sub>
+</p>
+
+<p align="center">
+  <sub><b>CLOUD &amp; DATABASES</b></sub><br />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=aws,azure,gcp,firebase,cloudflare,vercel,netlify,mongodb&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://skillicons.dev/icons?i=aws,azure,gcp,firebase,cloudflare,vercel,netlify,mongodb&theme=light" />
+    <img src="https://skillicons.dev/icons?i=aws,azure,gcp,firebase,cloudflare,vercel,netlify,mongodb&theme=light" alt="AWS, Azure, Google Cloud, Firebase, Cloudflare, Vercel, Netlify, MongoDB" />
+  </picture><br />
+  <sub>+ DigitalOcean · Linode · Oracle · GitHub Pages</sub>
+</p>
+
+<p align="center">
+  <sub><b>TOOLS &amp; HARDWARE</b></sub><br />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=github,notion,arduino,raspberrypi&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://skillicons.dev/icons?i=github,notion,arduino,raspberrypi&theme=light" />
+    <img src="https://skillicons.dev/icons?i=github,notion,arduino,raspberrypi&theme=light" alt="GitHub, Notion, Arduino, Raspberry Pi" />
+  </picture><br />
+  <sub>+ Canva · Adobe · Cisco</sub>
+</p>
+
+## 📊 GitHub stats
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="profile/stats-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="profile/stats-light.svg" />
+    <img src="profile/stats-light.svg" width="49%" alt="Jivansh's GitHub stats" />
+  </picture>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://streak-stats.demolab.com/?user=JivanshM&background=0D1117&border=30363D&stroke=30363D&ring=A78BFA&fire=FB923C&currStreakNum=E6EDF3&currStreakLabel=A78BFA&sideNums=E6EDF3&sideLabels=C9D1D9&dates=8B949E&border_radius=6" />
+    <source media="(prefers-color-scheme: light)" srcset="https://streak-stats.demolab.com/?user=JivanshM&background=FFFFFF&border=D0D7DE&stroke=D0D7DE&ring=7C3AED&fire=EA580C&currStreakNum=1F2328&currStreakLabel=7C3AED&sideNums=1F2328&sideLabels=1F2328&dates=57606A&border_radius=6" />
+    <img src="https://streak-stats.demolab.com/?user=JivanshM&background=FFFFFF&border=D0D7DE&stroke=D0D7DE&ring=7C3AED&fire=EA580C&currStreakNum=1F2328&currStreakLabel=7C3AED&sideNums=1F2328&sideLabels=1F2328&dates=57606A&border_radius=6" width="49%" alt="Jivansh's GitHub contribution streak" />
+  </picture>
+</p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="profile/top-langs-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="profile/top-langs-light.svg" />
+    <img src="profile/top-langs-light.svg" width="49%" alt="Jivansh's most used languages" />
+  </picture>
+</p>
+
+<br />
+
+<p align="center">
+  <img src="https://visitcount.itsvg.in/api?id=JivanshM&icon=5&color=1" alt="Profile views" /><br />
+  <sub>Thanks for stopping by! ✨</sub>
+</p>
