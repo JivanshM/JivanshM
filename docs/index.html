@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jivansh Midha</title>
+  <meta name="description" content="Jivansh Midha — student developer at Chitkara University. Python, JavaScript, C++.">
+  <meta name="theme-color" content="#07060b">
+  <meta property="og:title" content="Jivansh Midha">
+  <meta property="og:description" content="Student developer. Python · JavaScript · C++.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%2307060b'/%3E%3Ccircle cx='32' cy='32' r='17' fill='none' stroke='%23c8ff2e' stroke-width='7'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('js')</script>
+  <script src="main.js" defer></script>
+</head>
+<body>
+
+  <!-- Ambient layers -->
+  <canvas class="field" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="loader" aria-hidden="true">
+    <span class="loader__num">000</span>
+    <span class="loader__line"></span>
+  </div>
+
+  <!-- HUD -->
+  <header class="hud-top">
+    <a class="logo" href="#top" data-magnetic aria-label="Back to top">JM</a>
+    <nav class="nav mono" aria-label="Sections">
+      <a href="#work" data-scramble>Work</a>
+      <a href="#stack" data-scramble>Stack</a>
+      <a href="#contact" data-scramble>Contact</a>
+    </nav>
+  </header>
+
+  <div class="hud-bottom">
+    <div class="hud-clock mono">
+      <span><span class="dim">IST</span> <time id="clock">--:--:--</time></span>
+      <span class="dim">30.52°N 76.66°E</span>
+    </div>
+    <div class="meter" title="Hold anywhere. Fling things. Explore.">
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <circle class="meter__track" cx="20" cy="20" r="17"/>
+        <circle class="meter__fill" cx="20" cy="20" r="17"/>
+      </svg>
+      <span class="meter__text">
+        <span class="meter__num">0</span>
+        <span class="meter__pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      </span>
+      <span class="sr-only" id="powerLive" aria-live="polite"></span>
+    </div>
+  </div>
+
+  <main>
+    <!-- 01 — Presence -->
+    <section class="hero" id="top" data-dim="0">
+      <div class="hero__row hero__row--top">
+        <span class="mono" data-reveal>(Student developer)</span>
+        <span class="mono" data-reveal style="--d:.08s">Chitkara University — IN</span>
+      </div>
+
+      <h1 class="hero__name flex-type" aria-label="Jivansh">JIVANSH</h1>
+
+      <div class="hero__row hero__row--bottom">
+        <span class="mono" data-reveal style="--d:.16s">Python / JavaScript / C++</span>
+        <span class="mono status" data-reveal style="--d:.24s"><i class="dot"></i>Open to collabs</span>
+        <span class="mono hint" data-reveal style="--d:.32s"><i class="hint__icon"></i><span class="hint__text">Hold anywhere</span></span>
+      </div>
+    </section>
+
+    <!-- Tapes -->
+    <section class="tapes" aria-hidden="true" data-dim=".1">
+      <div class="tape tape--b">
+        <div class="tape__track">
+          <div class="tape__group">
+            <span class="w">Python</span><span class="star">✦</span>
+            <span class="w">JavaScript</span><span class="star">✦</span>
+            <span class="w">C++</span><span class="star">✦</span>
+            <span class="w">React</span><span class="star">✦</span>
+            <span class="w">TensorFlow</span><span class="star">✦</span>
+          </div>
+        </div>
+      </div>
+      <div class="tape tape--a">
+        <div class="tape__track">
+          <div class="tape__group">
+            <span class="w">Build</span><span class="star">✦</span>
+            <span class="w">Break</span><span class="star">✦</span>
+            <span class="w">Learn</span><span class="star">✦</span>
+            <span class="w">Ship</span><span class="star">✦</span>
+            <span class="w">Repeat</span><span class="star">✦</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 — Work (horizontal) -->
+    <section class="work" id="work" data-dim=".3">
+      <div class="work__sticky">
+        <header class="work__head">
+          <span class="mono">(What I build)</span>
+          <span class="mono"><span id="workIdx">01</span> / 04</span>
+        </header>
+
+        <!-- Swap these four for real projects: title, tags, href. data-art picks the generative visual. -->
+        <div class="work__track">
+          <a class="card" href="https://github.com/JivanshM" target="_blank" rel="noopener" data-art="wave" data-cursor="view">
+            <div class="card__art"><canvas></canvas></div>
+            <div class="card__meta">
+              <span class="card__idx mono">01</span>
+              <h3 class="card__title">Automation</h3>
+              <span class="card__tags mono">Python · Scripting</span>
+              <span class="card__arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+          <a class="card" href="https://github.com/JivanshM" target="_blank" rel="noopener" data-art="neural" data-cursor="view">
+            <div class="card__art"><canvas></canvas></div>
+            <div class="card__meta">
+              <span class="card__idx mono">02</span>
+              <h3 class="card__title">Machine Learning</h3>
+              <span class="card__tags mono">TensorFlow · NumPy · Pandas</span>
+              <span class="card__arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+          <a class="card" href="https://github.com/JivanshM" target="_blank" rel="noopener" data-art="orbit" data-cursor="view">
+            <div class="card__art"><canvas></canvas></div>
+            <div class="card__meta">
+              <span class="card__idx mono">03</span>
+              <h3 class="card__title">Web</h3>
+              <span class="card__tags mono">React · TypeScript · Tailwind</span>
+              <span class="card__arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+          <a class="card" href="https://github.com/JivanshM" target="_blank" rel="noopener" data-art="sort" data-cursor="view">
+            <div class="card__art"><canvas></canvas></div>
+            <div class="card__meta">
+              <span class="card__idx mono">04</span>
+              <h3 class="card__title">Algorithms</h3>
+              <span class="card__tags mono">C++ · Competitive</span>
+              <span class="card__arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+          <a class="work__all mono" href="https://github.com/JivanshM" target="_blank" rel="noopener" data-magnetic=".4">
+            <span>All work<br>on GitHub ↗</span>
+          </a>
+        </div>
+
+        <div class="work__progress"><span></span></div>
+      </div>
+    </section>
+
+    <!-- 03 — Stack (physics) -->
+    <section class="stack" id="stack" data-dim=".2">
+      <div class="stack__ghost" aria-hidden="true">TOOLKIT</div>
+      <header class="stack__head">
+        <span class="mono">(Toolkit)</span>
+        <span class="mono dim">Drag · Fling · Hold &amp; release</span>
+      </header>
+      <canvas class="stack__canvas" role="img" aria-label="Interactive cluster of the technologies I use"></canvas>
+      <ul class="sr-only" id="stackList"></ul>
+    </section>
+
+    <!-- 04 — Contact -->
+    <section class="contact" id="contact" data-dim="0">
+      <span class="mono" data-reveal>(What's next)</span>
+      <a class="contact__big flex-type" href="https://www.linkedin.com/in/jivansh-midha-62463926b" target="_blank" rel="noopener" aria-label="Let's build — connect on LinkedIn" data-cursor="hover"><span class="line">Let's</span><span class="line">build</span></a>
+      <div class="contact__links" data-reveal>
+        <a class="pill" href="https://www.linkedin.com/in/jivansh-midha-62463926b" target="_blank" rel="noopener" data-magnetic>LinkedIn <span aria-hidden="true">↗</span></a>
+        <a class="pill" href="https://github.com/JivanshM" target="_blank" rel="noopener" data-magnetic>GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+      <footer class="footer mono">
+        <span>© 2026 Jivansh Midha</span>
+        <span class="dim">Designed to be felt, not read</span>
+        <a href="#top" data-scramble>Back to top ↑</a>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Cursor + effects -->
+  <div class="cursor-ring" aria-hidden="true">
+    <div class="cursor-ring__body">
+      <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48"/></svg>
+      <span class="cursor-ring__label"></span>
+    </div>
+  </div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="fx" aria-hidden="true"></div>
+  <div class="levelup" aria-hidden="true">
+    <strong></strong>
+    <span class="levelup__pips"><i></i><i></i><i></i><i></i><i></i></span>
+  </div>
+
+</body>
+</html>
