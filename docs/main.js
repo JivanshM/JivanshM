@@ -613,10 +613,19 @@
       start(e.clientX, e.clientY, e.pointerId);
     });
     addEventListener('pointermove', e => {
-      if (st.on && e.pointerId === st.id) { st.x = e.clientX; st.y = e.clientY; }
+      if (st.on && (e.pointerId === st.id || (typeof st.id === 'string' && e.pointerType === 'mouse'))) {
+        st.x = e.clientX;
+        st.y = e.clientY;
+      }
     }, { passive: true });
     addEventListener('pointerup', e => { if (e.pointerId === st.id) end(true); });
     addEventListener('pointercancel', e => { if (e.pointerId === st.id) end(false); });
+
+    // keyboard and click charges start at the pointer if it is on the page, else at the centre
+    const startAtPointer = id => {
+      const here = pointer.active && !root.classList.contains('cursor-out');
+      start(here ? pointer.x : innerWidth / 2, here ? pointer.y : innerHeight / 2, id);
+    };
 
     // keyboard: hold Enter or Space on the meter
     const meterEl = $('.meter');
@@ -624,14 +633,14 @@
     meterEl.addEventListener('keydown', e => {
       if (!isKey(e)) return;
       e.preventDefault();
-      if (!e.repeat && !st.on) start(pointer.active ? pointer.x : innerWidth / 2, pointer.active ? pointer.y : innerHeight / 2, 'key');
+      if (!e.repeat && !st.on) startAtPointer('key');
     });
     meterEl.addEventListener('keyup', e => { if (isKey(e) && st.id === 'key') end(true); });
     meterEl.addEventListener('blur', () => { if (st.id === 'key') end(false); });
     let clickTimer = 0;
     meterEl.addEventListener('click', () => {
       if (st.on) return;
-      start(innerWidth / 2, innerHeight / 2, 'click');
+      startAtPointer('click');
       clearTimeout(clickTimer);
       clickTimer = setTimeout(() => { if (st.on && st.id === 'click') { st.level = 1; end(true); } }, HOLD * 1000);
     });

@@ -837,7 +837,10 @@ html:not(.js) .work__sticky { position: relative; height: auto; overflow-x: auto
 }
 
 @media (max-height: 500px) {
-  .contact__big { font-size: clamp(56px, min(20vw, 20svh), 380px); }
+  .contact { padding-top: calc(var(--pad) + 30px); padding-bottom: calc(var(--pad) + 60px); }
+  .contact__big { font-size: clamp(48px, min(20vw, 15svh), 380px); margin: 8px 0 14px; }
+  .contact .pill { padding: 12px 24px; }
+  .footer { margin-top: 14px; padding-top: 12px; }
   .hero { padding-top: calc(var(--pad) + 44px); }
   .hero__row--top { margin-bottom: 14px; }
   .hero__row--bottom { margin-top: 14px; }
@@ -863,6 +866,7 @@ html:not(.js) .work__sticky { position: relative; height: auto; overflow-x: auto
   .meter__pips i, .levelup__pips i { forced-color-adjust: none; background: GrayText; box-shadow: none; }
   .meter__pips i.is-lit, .levelup__pips i.is-lit { background: CanvasText; }
   .cursor-dot { forced-color-adjust: none; }
+  .cursor-ring { forced-color-adjust: none; }
 }
 
 /* ---------- without JavaScript ---------- */
