@@ -13,7 +13,7 @@
 
   // Points needed for each level. Levels are shown as pips and numerals, never words.
   const LEVELS = [0, 300, 1500, 4000, 9000];
-  const NUMERALS = ['I', 'II', 'III', 'IV', 'V'];
+  const NUMERALS = ['01', '02', '03', '04', '05'];
 
   /* ---------- helpers ---------- */
 
@@ -320,8 +320,9 @@
       if (lost) return;
       time += dt * (REDUCED ? 0.1 : 1) * (1 + api.charge * 3);
       pulse.t += dt;
-      const tx = pointer.active ? pointer.x / innerWidth : 0.5 + Math.sin(time * 0.35) * 0.18;
-      const ty = pointer.active ? 1 - pointer.y / innerHeight : 0.5 + Math.cos(time * 0.27) * 0.12;
+      const aim = Charge.on && typeof Charge.id === 'string' ? Charge : pointer.active ? pointer : null;
+      const tx = aim ? aim.x / innerWidth : 0.5 + Math.sin(time * 0.35) * 0.18;
+      const ty = aim ? 1 - aim.y / innerHeight : 0.5 + Math.cos(time * 0.27) * 0.12;
       mouse.x = damp(mouse.x, tx, 3, dt);
       mouse.y = damp(mouse.y, ty, 3, dt);
       dim = damp(dim, api.dim, 2.5, dt);
@@ -357,6 +358,7 @@
     const pips = $$('.meter__pips i');
     const fill = $('.meter__fill');
     const live = $('#powerLive');
+    const srVal = $('#meterVal');
     const KEY = 'jm-power';
     const C = TAU * 17;
     const levelFor = v => LEVELS.reduce((l, at, i) => (v >= at ? i : l), 0);
@@ -364,7 +366,7 @@
     let value = 0;
     try { value = Math.max(0, parseInt(localStorage.getItem(KEY), 10) || 0); } catch (_) { /* private mode */ }
     let level = levelFor(value);
-    let shown = value, energy = 0, lastText = '', saveTimer = 0;
+    let shown = value, energy = 0, lastText = '', saveTimer = 0, upTimer = 0, dirty = false;
 
     const progress = () => {
       const cur = LEVELS[level], next = LEVELS[level + 1];
@@ -380,18 +382,23 @@
 
     const save = () => {
       clearTimeout(saveTimer);
-      try { localStorage.setItem(KEY, String(value)); } catch (_) { /* ignore */ }
+      if (!dirty) return;
+      dirty = false;
+      try {
+        localStorage.setItem(KEY, String(Math.max(value, parseInt(localStorage.getItem(KEY), 10) || 0)));
+      } catch (_) { /* ignore */ }
     };
     addEventListener('pagehide', save);
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') save(); });
 
-    const levelUp = () => {
+    const levelUp = quiet => {
       live.textContent = `Level ${level + 1} of ${LEVELS.length}`;
       paintPips(pips);
       meter.classList.remove('is-up');
       void meter.offsetWidth;
       meter.classList.add('is-up');
-      FX.levelUp(NUMERALS[level], el => paintPips(el));
+      clearTimeout(upTimer);
+      if (!quiet) upTimer = setTimeout(() => FX.levelUp(NUMERALS[level], el => paintPips(el)), 600);
       const r = meter.getBoundingClientRect();
       FX.flash(r.left + r.width / 2, r.top + r.height / 2);
       Bg.pulse(r.left + r.width / 2, r.top + r.height / 2, 1.2);
@@ -401,6 +408,8 @@
       shown = value - shown < 1 ? value : damp(shown, value, 5, dt);
       const text = format(Math.round(shown));
       if (text !== lastText) { numEl.textContent = text; lastText = text; }
+      const label = `Points ${format(value)}`;
+      if (srVal.textContent !== label) srVal.textContent = label;
       const prog = progress();
       fill.style.strokeDashoffset = (C * (1 - prog)).toFixed(2);
       fill.style.opacity = prog > 0.002 ? '1' : '0';
@@ -409,12 +418,14 @@
 
     return {
       get energy() { return clamp(energy, 0, 1); },
-      gain(n, x, y) {
+      gain(n, x, y, quiet) {
         value += n;
+        dirty = true;
         const l = levelFor(value);
         if (l > level) {
           level = l;
-          levelUp();
+          levelUp(quiet);
+          if (quiet && x != null) FX.pop(n, x, y);
           save();
         } else {
           if (x != null) FX.pop(n, x, y);
@@ -613,10 +624,17 @@
     meterEl.addEventListener('keydown', e => {
       if (!isKey(e)) return;
       e.preventDefault();
-      if (!e.repeat && !st.on) start(innerWidth / 2, innerHeight / 2, 'key');
+      if (!e.repeat && !st.on) start(pointer.active ? pointer.x : innerWidth / 2, pointer.active ? pointer.y : innerHeight / 2, 'key');
     });
     meterEl.addEventListener('keyup', e => { if (isKey(e) && st.id === 'key') end(true); });
     meterEl.addEventListener('blur', () => { if (st.id === 'key') end(false); });
+    let clickTimer = 0;
+    meterEl.addEventListener('click', () => {
+      if (st.on) return;
+      start(innerWidth / 2, innerHeight / 2, 'click');
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => { if (st.on && st.id === 'click') { st.level = 1; end(true); } }, HOLD * 1000);
+    });
     addEventListener('blur', () => end(false));
     addEventListener('contextmenu', e => { if (st.on) e.preventDefault(); });
 
@@ -996,7 +1014,7 @@
         if (!first) return;
         first = false;
         const r = card.getBoundingClientRect();
-        Power.gain(100, r.left + r.width / 2, r.top + r.height / 2);
+        Power.gain(100, r.left + r.width / 2, r.top + r.height / 2, true);
       });
       const track = e => {
         const cr = canvas.getBoundingClientRect();

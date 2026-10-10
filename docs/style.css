@@ -705,7 +705,14 @@ html:not(.js) .work__sticky { position: relative; height: auto; overflow-x: auto
 [data-cstate="view"] .cursor-ring__label { color: var(--bg); font-family: var(--display); font-size: 30px; opacity: 1; }
 [data-cstate="view"] .cursor-dot { opacity: 0; }
 
-[data-cstate="hide"] .cursor-ring, [data-cstate="hide"] .cursor-dot { opacity: 0; }
+@media (forced-colors: none) {
+  [data-cstate="hide"] .cursor-ring { opacity: 0; }
+  [data-cstate="hide"] .cursor-dot { mix-blend-mode: normal; background: var(--bg); }
+}
+
+[data-cstate="ring"] .cursor-ring { mix-blend-mode: normal; }
+[data-cstate="ring"] .cursor-ring__body { width: 66px; height: 66px; background: transparent; border-color: var(--fg); }
+[data-cstate="ring"] .cursor-dot { opacity: 0; }
 
 [data-cstate="drag"] .cursor-ring__body { width: 84px; height: 84px; border-width: 2px; }
 
@@ -717,7 +724,7 @@ html:not(.js) .work__sticky { position: relative; height: auto; overflow-x: auto
 .fx {
   position: fixed;
   inset: 0;
-  z-index: 110;
+  z-index: 116;
   overflow: hidden;
   pointer-events: none;
 }
@@ -823,7 +830,14 @@ html:not(.js) .work__sticky { position: relative; height: auto; overflow-x: auto
   .stack__head .dim { display: none; }
 }
 
+@media (min-width: 641px) and (max-height: 740px) {
+  .contact { padding-top: calc(var(--pad) + 48px); }
+  .contact__big { margin: 12px 0 24px; }
+  .footer { margin-top: 24px; }
+}
+
 @media (max-height: 500px) {
+  .contact__big { font-size: clamp(56px, min(20vw, 20svh), 380px); }
   .hero { padding-top: calc(var(--pad) + 44px); }
   .hero__row--top { margin-bottom: 14px; }
   .hero__row--bottom { margin-top: 14px; }
@@ -840,6 +854,7 @@ html:not(.js) .work__sticky { position: relative; height: auto; overflow-x: auto
   .meter svg { width: 28px; height: 28px; }
   .work__sticky { justify-content: safe center; padding: var(--pad) 0 calc(var(--pad) + 44px); }
   .card { height: calc(100vh - 2 * var(--pad) - 100px); height: calc(100svh - 2 * var(--pad) - 100px); }
+  .stack { min-height: 480px; }
 }
 
 /* ---------- forced colors ---------- */
@@ -857,8 +872,7 @@ html:not(.js) .stack__head { position: static; margin-bottom: 20px; }
 html:not(.js) .stack__canvas,
 html:not(.js) .stack__head .dim,
 html:not(.js) .hint,
-html:not(.js) .meter,
-html:not(.js) .hud-clock { display: none; }
+html:not(.js) .hud-bottom { display: none; }
 html:not(.js) #stackList {
   position: static; width: auto; height: auto; margin: 0; padding: 0;
   overflow: visible; clip: auto; white-space: normal;
