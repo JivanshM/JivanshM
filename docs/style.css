@@ -23,6 +23,8 @@ html {
   background: var(--bg);
   color: var(--fg);
   -webkit-text-size-adjust: 100%;
+  /* focused elements scroll clear of the fixed bottom HUD */
+  scroll-padding-bottom: calc(var(--pad) + 72px);
 }
 
 body {
