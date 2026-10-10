@@ -8,18 +8,8 @@
 
   /* ---------- content you might want to edit ---------- */
 
-  // [label, tier] — tier 3 = core, 2 = daily drivers, 1 = toolbox.
-  // Order matters on phones: only the first 24 are shown there.
-  const TECH = [
-    ['Python', 3], ['JavaScript', 3], ['C++', 3],
-    ['React', 2], ['TypeScript', 2], ['C', 2], ['TensorFlow', 2], ['Django', 2],
-    ['Flask', 2], ['React Native', 2], ['MongoDB', 2], ['Firebase', 2],
-    ['HTML5', 1], ['CSS3', 1], ['Tailwind', 1], ['NumPy', 1], ['Pandas', 1], ['AWS', 1],
-    ['GCP', 1], ['Azure', 1], ['GitHub', 1], ['Vercel', 1], ['Arduino', 1], ['Raspberry Pi', 1],
-    ['Bootstrap', 1], ['PHP', 1], ['Cloudflare', 1], ['Netlify', 1], ['Digital Ocean', 1],
-    ['Linode', 1], ['Oracle', 1], ['WordPress', 1], ['PowerShell', 1], ['Notion', 1],
-    ['Canva', 1], ['Adobe', 1], ['Cisco', 1],
-  ];
+  // The toolkit is written in index.html (#stackList) so it also works without JS.
+  const TECH = Array.from(document.querySelectorAll('#stackList li'), li => [li.textContent.trim(), +li.dataset.tier || 1]);
 
   // Points needed for each level. Levels are shown as pips and numerals, never words.
   const LEVELS = [0, 300, 1500, 4000, 9000];
@@ -71,9 +61,21 @@
     if (pointer.travel > 900) { pointer.travel = 0; Power.gain(1); }
   }, { passive: true });
 
-  addEventListener('pointerup', e => {
-    if (e.pointerType !== 'mouse') setTimeout(() => { pointer.active = false; }, 900);
-  });
+  let idleTimer = 0;
+  addEventListener('pointerdown', e => {
+    clearTimeout(idleTimer);
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
+    if (!pointer.active || e.pointerType !== 'mouse') { pointer.sx = pointer.x; pointer.sy = pointer.y; }
+    if (!pointer.active) { pointer.active = true; root.classList.add('cursor-on'); }
+  }, { passive: true });
+  const touchGone = e => {
+    if (e.pointerType === 'mouse') return;
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => { pointer.active = false; }, 900);
+  };
+  addEventListener('pointerup', touchGone);
+  addEventListener('pointercancel', touchGone);
   document.addEventListener('mouseleave', () => root.classList.add('cursor-out'));
   document.addEventListener('mouseenter', () => root.classList.remove('cursor-out'));
 
@@ -115,6 +117,9 @@
         const star = document.createElement('small');
         star.textContent = '✦';
         el.append(star);
+        const half = el.offsetWidth * 0.55 + 8;
+        el.style.left = `${clamp(x, half, innerWidth - half)}px`;
+        el.style.top = `${Math.max(y, el.offsetHeight * 1.9 + 12)}px`;
       },
       flash(x, y) {
         const el = document.createElement('span');
@@ -207,6 +212,7 @@
 
         vec3 base   = vec3(0.027, 0.024, 0.043);
         vec3 deep   = vec3(0.13, 0.05, 0.34);
+        deep = mix(deep, vec3(0.22, 0.04, 0.30), uEnergy * 0.5);
         vec3 violet = vec3(0.40, 0.23, 1.0);
         vec3 cyan   = vec3(0.0, 0.72, 1.0);
         vec3 pink   = vec3(1.0, 0.28, 0.72);
@@ -219,18 +225,19 @@
         vec3 col = base;
         col = mix(col, deep, smoothstep(0.15, 0.7, f));
         col = mix(col, violet, smoothstep(0.45, 0.95, f * length(q) * 1.3) * (0.72 + uEnergy * 0.28));
-        col += hot * pow(clamp(r.y * f * 2.0 - 0.3, 0.0, 1.0), 1.6) * (0.95 + uEnergy * 0.9);
+        col += hot * pow(clamp(r.y * f * 2.0 - 0.3 + uEnergy * 0.12, 0.0, 1.0), 1.6) * (0.95 + uEnergy * 0.9);
 
         // the glow that follows you
         float glow = exp(-md * md * (10.0 - uCharge * 6.0));
-        vec3 haloCol = mix(violet, lime, uCharge * (0.6 + 0.4 * sin(uTime * 9.0)));
-        col += haloCol * glow * (0.16 + uEnergy * 0.1 + uCharge * 0.55);
+        col = mix(col, col * 0.4, glow * uCharge);
+        col += violet * glow * (0.16 + uEnergy * 0.1) * (1.0 - uCharge);
+        col += lime * glow * uCharge * (0.75 + 0.25 * sin(uTime * 9.0));
 
         // shockwave light
         col += mix(lime, vec3(1.0), 0.35) * wave * 0.45;
 
         // vignette + section dim
-        float vig = smoothstep(1.3, 0.2, length((uv - 0.5) * vec2(asp * 0.8, 1.0)));
+        float vig = 1.0 - smoothstep(0.2, 1.3, length((uv - 0.5) * vec2(asp * 0.8, 1.0)));
         col *= mix(0.42, 1.0, vig);
         col *= 1.0 - uDim * 0.5;
 
@@ -238,36 +245,37 @@
       }`;
 
     const compile = (type, src) => {
-      const s = gl.createShader(type);
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
-      return s;
+      const sh = gl.createShader(type);
+      gl.shaderSource(sh, src);
+      gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh));
+      return sh;
     };
-    let prog;
-    try {
-      prog = gl.createProgram();
+    let U = {};
+    const init = () => {
+      const prog = gl.createProgram();
       gl.attachShader(prog, compile(gl.VERTEX_SHADER, vert));
       gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, frag));
       gl.linkProgram(prog);
       if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+      gl.useProgram(prog);
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'p');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      U = {};
+      ['uRes', 'uTime', 'uMouse', 'uEnergy', 'uCharge', 'uPulse', 'uPulseAmp', 'uDim']
+        .forEach(n => { U[n] = gl.getUniformLocation(prog, n); });
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    };
+    try {
+      init();
     } catch (err) {
       console.warn('[field] shader disabled:', err);
       root.classList.add('no-webgl');
       return api;
     }
-    gl.useProgram(prog);
-
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const loc = gl.getAttribLocation(prog, 'p');
-    gl.enableVertexAttribArray(loc);
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-    const U = {};
-    ['uRes', 'uTime', 'uMouse', 'uEnergy', 'uCharge', 'uPulse', 'uPulseAmp', 'uDim']
-      .forEach(n => { U[n] = gl.getUniformLocation(prog, n); });
 
     // The aurora is soft, so render it at a fraction of the screen and let CSS upscale.
     const resize = () => {
@@ -284,7 +292,18 @@
     addEventListener('resize', resize);
 
     let lost = false;
-    canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); lost = true; });
+    canvas.addEventListener('webglcontextlost', e => {
+      e.preventDefault();
+      lost = true;
+      root.classList.add('no-webgl');
+    });
+    canvas.addEventListener('webglcontextrestored', () => {
+      try {
+        init();
+        lost = false;
+        root.classList.remove('no-webgl');
+      } catch (_) { /* stay on the CSS fallback */ }
+    });
 
     const mouse = { x: 0.5, y: 0.5 };
     const pulse = { x: 0.5, y: 0.5, t: 99, amp: 0 };
@@ -359,6 +378,13 @@
     paintPips(pips);
     energy = (level + progress()) / (LEVELS.length - 1);
 
+    const save = () => {
+      clearTimeout(saveTimer);
+      try { localStorage.setItem(KEY, String(value)); } catch (_) { /* ignore */ }
+    };
+    addEventListener('pagehide', save);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') save(); });
+
     const levelUp = () => {
       live.textContent = `Level ${level + 1} of ${LEVELS.length}`;
       paintPips(pips);
@@ -375,7 +401,9 @@
       shown = value - shown < 1 ? value : damp(shown, value, 5, dt);
       const text = format(Math.round(shown));
       if (text !== lastText) { numEl.textContent = text; lastText = text; }
-      fill.style.strokeDashoffset = (C * (1 - progress())).toFixed(2);
+      const prog = progress();
+      fill.style.strokeDashoffset = (C * (1 - prog)).toFixed(2);
+      fill.style.opacity = prog > 0.002 ? '1' : '0';
       energy = damp(energy, (level + progress()) / (LEVELS.length - 1), 1.2, dt);
     });
 
@@ -383,13 +411,16 @@
       get energy() { return clamp(energy, 0, 1); },
       gain(n, x, y) {
         value += n;
-        if (x != null) FX.pop(n, x, y);
         const l = levelFor(value);
-        if (l > level) { level = l; levelUp(); }
-        clearTimeout(saveTimer);
-        saveTimer = setTimeout(() => {
-          try { localStorage.setItem(KEY, String(value)); } catch (_) { /* ignore */ }
-        }, 500);
+        if (l > level) {
+          level = l;
+          levelUp();
+          save();
+        } else {
+          if (x != null) FX.pop(n, x, y);
+          clearTimeout(saveTimer);
+          saveTimer = setTimeout(save, 500);
+        }
       },
     };
   })();
@@ -471,7 +502,10 @@
     const groups = $$('.flex-type').map(el => {
       const chars = splitChars(el);
       const zeros = () => chars.map(() => 0);
-      const g = { el, chars, wt: zeros(), wd: zeros(), last: chars.map(() => ''), visible: true, fit: 1, ty: 0, avail: 0 };
+      const g = {
+        el, chars, wt: zeros(), wd: zeros(), last: chars.map(() => ''),
+        visible: true, fit: 1, ty: 0, avail: 0, hero: el.classList.contains('hero__name'),
+      };
       onVisible(el, e => { g.visible = e.isIntersecting; });
       return g;
     });
@@ -488,7 +522,7 @@
       kick = damp(kick, 0, 1.8, dt);
       const radius = clamp(innerWidth * 0.3, 170, 520);
       const idle = REDUCED ? 0 : pointer.active ? 0.1 : 0.55;
-      const charge = Charge.on ? Charge.level : 0;
+      const charge = Charge.on && !REDUCED ? Charge.level : 0;
       groups.forEach(g => {
         if (!g.visible) return;
         const rects = g.chars.map(c => c.getBoundingClientRect());
@@ -516,6 +550,7 @@
           c.style.fontVariationSettings = fvs;
           c.style.setProperty('--p', wt.toFixed(3));
         });
+        if (g.hero && !REDUCED) g.ty = scrollY <= innerHeight * 1.3 ? scrollY * 0.38 : g.ty;
         const natural = (right - left) / g.fit;
         const room = g.avail * 0.98;
         const fit = natural > room ? room / natural : 1;
@@ -524,22 +559,19 @@
       });
     });
 
-    return {
-      kick(s) { kick = Math.max(kick, s); },
-      offset(el, y) { const g = groups.find(x => x.el === el); if (g) g.ty = y; },
-    };
+    return { kick(s) { kick = Math.max(kick, s); } };
   })();
 
   /* ---------- charge: hold anywhere, release a shockwave ---------- */
 
   const Charge = (() => {
     const HOLD = 1.1; // seconds to full charge
-    const st = { on: false, level: 0, t0: 0, x: 0, y: 0, full: false, first: true };
+    const st = { on: false, level: 0, t0: 0, x: 0, y: 0, full: false, first: true, id: -1 };
     const blocked = el => !!el.closest('a, button, input, textarea, select, label, .meter');
     const hint = $('.hint');
 
-    const start = (x, y) => {
-      Object.assign(st, { on: true, level: 0, t0: performance.now(), x, y, full: false });
+    const start = (x, y, id) => {
+      Object.assign(st, { on: true, level: 0, t0: performance.now(), x, y, full: false, id });
       root.classList.add('is-charging');
     };
     const end = fire => {
@@ -556,8 +588,8 @@
         Power.gain(5);
         return;
       }
-      blast(st.x, st.y, lvl);
       Power.gain(lvl >= 1 ? 1000 : Math.round(lvl * 50) * 10, st.x, st.y);
+      blast(st.x, st.y, lvl);
       if (lvl >= 1 && st.first) {
         st.first = false;
         hint.classList.add('is-done');
@@ -566,12 +598,25 @@
     };
 
     addEventListener('pointerdown', e => {
-      if (e.button !== 0 || Stack.dragging || blocked(e.target)) return;
-      start(e.clientX, e.clientY);
+      if (e.button !== 0 || st.on || Stack.dragging || blocked(e.target)) return;
+      start(e.clientX, e.clientY, e.pointerId);
     });
-    addEventListener('pointermove', e => { if (st.on) { st.x = e.clientX; st.y = e.clientY; } }, { passive: true });
-    addEventListener('pointerup', () => end(true));
-    addEventListener('pointercancel', () => end(false));
+    addEventListener('pointermove', e => {
+      if (st.on && e.pointerId === st.id) { st.x = e.clientX; st.y = e.clientY; }
+    }, { passive: true });
+    addEventListener('pointerup', e => { if (e.pointerId === st.id) end(true); });
+    addEventListener('pointercancel', e => { if (e.pointerId === st.id) end(false); });
+
+    // keyboard: hold Enter or Space on the meter
+    const meterEl = $('.meter');
+    const isKey = e => e.key === ' ' || e.key === 'Enter';
+    meterEl.addEventListener('keydown', e => {
+      if (!isKey(e)) return;
+      e.preventDefault();
+      if (!e.repeat && !st.on) start(innerWidth / 2, innerHeight / 2, 'key');
+    });
+    meterEl.addEventListener('keyup', e => { if (isKey(e) && st.id === 'key') end(true); });
+    meterEl.addEventListener('blur', () => { if (st.id === 'key') end(false); });
     addEventListener('blur', () => end(false));
     addEventListener('contextmenu', e => { if (st.on) e.preventDefault(); });
 
@@ -594,7 +639,7 @@
     Bg.pulse(x, y, 0.5 + s);
     Bg.shake = Math.max(Bg.shake, s * s);
     Stack.blast(x, y, s);
-    FlexType.kick(s);
+    if (!REDUCED) FlexType.kick(s);
   }
 
   /* ---------- magnetic + scramble ---------- */
@@ -615,6 +660,7 @@
   const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+=/<>';
   $$('[data-scramble]').forEach(el => {
     const final = el.textContent;
+    el.setAttribute('aria-label', final.replace(/\s*[↑↗]\s*$/, ''));
     let raf = 0;
     el.addEventListener('pointerenter', () => {
       if (REDUCED) return;
@@ -867,7 +913,7 @@
             let c = 'rgba(242,239,233,0.22)';
             if (k >= N - i) c = 'rgba(124,92,255,0.85)';
             if (k === j || k === j + 1) c = ACCENT;
-            if (k === swapped || k === swapped + 1) c = ACCENT;
+            if (swapped >= 0 && (k === swapped || k === swapped + 1)) c = ACCENT;
             if (sweep >= 0 && k / N < sweep) c = k / N > sweep - 0.12 ? ACCENT : 'rgba(124,92,255,0.85)';
             ctx.fillStyle = c;
             ctx.fillRect(pad + k * bw + bw * 0.18, base - bh, bw * 0.64, bh);
@@ -914,6 +960,14 @@
       if (idx !== lastIdx) { idxEl.textContent = idx; lastIdx = idx; }
     });
 
+    track.addEventListener('focusin', e => {
+      const el = e.target.closest('.card, .work__all');
+      if (!el || !dist || !el.matches(':focus-visible')) return;
+      const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+      const top = sec.getBoundingClientRect().top + scrollY;
+      scrollTo(0, top + clamp(el.offsetLeft - pad, 0, dist));
+    });
+
     cards.forEach(card => {
       const canvas = $('canvas', card);
       const ctx = canvas.getContext('2d');
@@ -937,6 +991,12 @@
         st.hover = true;
         if (FINE) card.classList.add('is-tilting');
         if (first) { first = false; Power.gain(100, e.clientX, e.clientY); }
+      });
+      card.addEventListener('focus', () => {
+        if (!first) return;
+        first = false;
+        const r = card.getBoundingClientRect();
+        Power.gain(100, r.left + r.width / 2, r.top + r.height / 2);
       });
       const track = e => {
         const cr = canvas.getBoundingClientRect();
@@ -964,7 +1024,7 @@
         st.t += REDUCED ? dt * 0.15 : dt;
         st.hoverT = damp(st.hoverT, st.hover ? 1 : 0, 5, dt);
         if (!st.hover && st.hoverT < 0.02) { st.mx = -1e4; st.my = -1e4; }
-        scene.draw(dt);
+        scene.draw(REDUCED ? dt * 0.15 : dt);
       });
     });
   })();
@@ -975,17 +1035,15 @@
     const sec = $('.stack');
     const canvas = $('.stack__canvas');
     const ctx = canvas.getContext('2d');
-    const list = $('#stackList');
-    TECH.forEach(([label]) => { const li = document.createElement('li'); li.textContent = label; list.append(li); });
 
     const SIZE = { 1: 1, 2: 1.45, 3: 2.1 };
     let w = 0, h = 0, dpr = 1, balls = [], started = false, visible = false;
     let hover = null, rect = canvas.getBoundingClientRect();
-    const drag = { ball: null, ox: 0, oy: 0 };
+    const drag = { ball: null, ox: 0, oy: 0, id: -1 };
     const local = { x: -1e4, y: -1e4, inside: false };
 
     const build = () => {
-      const mobile = w < 640;
+      const mobile = w < 640 || h < 500;
       const items = mobile ? TECH.slice(0, 24) : TECH;
       const sumS2 = items.reduce((a, [, tier]) => a + SIZE[tier] ** 2, 0);
       const k = Math.sqrt(((mobile ? 0.34 : 0.27) * w * h) / (Math.PI * sumS2));
@@ -996,10 +1054,10 @@
         ctx.font = `600 100px ${FONT}`;
         const em = Math.max(...lines.map(l => ctx.measureText(l).width)) / 100;
         const r = Math.max(k * SIZE[tier], (em * minFs) / 1.5, lines.length * minFs * 0.9);
-        const fs = Math.min(r * (tier === 3 ? 0.36 : 0.33), (1.5 * r) / em, (1.25 * r) / (lines.length * 1.05));
+        const fs = Math.max(minFs, Math.min(r * (tier === 3 ? 0.36 : 0.33), (1.5 * r) / em, (1.25 * r) / (lines.length * 1.05)));
         const old = prev.get(label);
         return {
-          label, lines, tier, r, fs, m: r * r, hot: 0, in: !!old,
+          label, lines, tier, r, fs, m: r * r, hot: 0, in: old ? old.in : false,
           x: old ? old.x : w / 2 + (Math.random() - 0.5) * w * 0.5,
           y: old ? old.y : -r - Math.random() * h * 0.9,
           vx: old ? old.vx : 0, vy: old ? old.vy : 300 + Math.random() * 300,
@@ -1035,11 +1093,13 @@
     const toLocal = (cx, cy) => ({ x: cx - rect.left, y: cy - rect.top });
 
     canvas.addEventListener('pointerdown', e => {
+      if (e.button !== 0 || drag.ball) return;
       rect = canvas.getBoundingClientRect();
       const p = toLocal(e.clientX, e.clientY);
       const b = pick(p.x, p.y);
       if (!b) return;
       drag.ball = b;
+      drag.id = e.pointerId;
       drag.ox = p.x - b.x;
       drag.oy = p.y - b.y;
       local.x = p.x; local.y = p.y;
@@ -1048,12 +1108,13 @@
       Cursor.set('drag');
     });
     canvas.addEventListener('pointermove', e => {
+      if (drag.ball && e.pointerId !== drag.id) return;
       const p = toLocal(e.clientX, e.clientY);
       local.x = p.x; local.y = p.y;
     });
     const release = (e, fling) => {
       const b = drag.ball;
-      if (!b) return;
+      if (!b || e.pointerId !== drag.id) return;
       drag.ball = null;
       root.classList.remove('is-dragging');
       const sp = Math.hypot(b.vx, b.vy), max = 3200;
@@ -1062,11 +1123,18 @@
     };
     canvas.addEventListener('pointerup', e => release(e, true));
     canvas.addEventListener('pointercancel', e => release(e, false));
+    canvas.addEventListener('lostpointercapture', e => release(e, false));
+    // On touch, a quick swipe still scrolls the page; press and hold a bubble to grab it.
+    let touchOnBall = false, touchT0 = 0;
     canvas.addEventListener('touchstart', e => {
-      const t = e.touches[0];
+      const t = e.changedTouches[0];
       rect = canvas.getBoundingClientRect();
       const p = toLocal(t.clientX, t.clientY);
-      if (pick(p.x, p.y)) e.preventDefault();
+      touchOnBall = !!pick(p.x, p.y);
+      touchT0 = e.timeStamp;
+    }, { passive: true });
+    canvas.addEventListener('touchmove', e => {
+      if (touchOnBall && e.cancelable && e.timeStamp - touchT0 >= 120) e.preventDefault();
     }, { passive: false });
 
     const step = dt => {
@@ -1173,7 +1241,7 @@
       rect = canvas.getBoundingClientRect();
       const lp = toLocal(pointer.x, pointer.y);
       if (!drag.ball) { local.x = lp.x; local.y = lp.y; }
-      local.inside = FINE && pointer.active && lp.x >= 0 && lp.y >= 0 && lp.x <= w && lp.y <= h;
+      local.inside = FINE && pointer.active && document.elementFromPoint(pointer.x, pointer.y) === canvas;
       hover = local.inside && !drag.ball ? pick(local.x, local.y) : null;
       if (local.inside || drag.ball) Cursor.set(drag.ball || hover ? 'drag' : '');
       step(REDUCED ? dt * 0.6 : dt);
@@ -1210,7 +1278,6 @@
       if (REDUCED) return;
       const y = scrollY;
       if (y > innerHeight * 1.3) return;
-      FlexType.offset(name, y * 0.38);
       name.style.opacity = clamp(1 - (y / innerHeight) * 1.1, 0, 1).toFixed(3);
     });
   })();
@@ -1251,7 +1318,7 @@
     const line = $('.loader__line', loader);
     const D = 1500, t0 = performance.now();
     const run = now => {
-      const p = Math.min(1, (now - t0) / D);
+      const p = clamp((now - t0) / D, 0, 1);
       const e = 1 - Math.pow(1 - p, 3);
       num.textContent = String(Math.round(e * 100)).padStart(3, '0');
       num.style.fontVariationSettings = `"wght" ${Math.round(200 + e * 700)}, "wdth" ${(75 + e * 50).toFixed(1)}`;
@@ -1280,4 +1347,6 @@
       }
     });
   });
+
+  window.__jmBoot = 1;
 })();
